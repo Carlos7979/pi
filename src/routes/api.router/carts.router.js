@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router()
-const { Cart, Product } = require('../data');
+const { Cart, Product } = require('../../dao/fileSystem');
 
 router.post('/', async (req, res) => {
 	try {

@@ -2,11 +2,9 @@ const { Router } = require('express')
 const router = Router()
 
 // Importar todos los routers;
-const api = require('./api.router')
-const views = require('./views.router')
+const products = require('./products.view.router')
 
 // Configurar los routers
-router.use('/api', api)
-router.use('/', views)
+router.use('/products', products)
 
 module.exports = router

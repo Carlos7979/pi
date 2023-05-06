@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-class Carts {
+class Cart {
     constructor(path) {
         this.path = path
         this.carts = []
@@ -91,5 +91,5 @@ class Carts {
     }
 }
 
-const carts = new Carts('db/carts.json')
+const carts = new Cart('db/carts.json')
 module.exports = carts
