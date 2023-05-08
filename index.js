@@ -1,6 +1,14 @@
+require('dotenv').config()
+const { connect } = require('mongoose')
 const app = require('./src/app.js')
-const port = 8080
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+const {
+    env: { PORT, MONGO_URL: url },
+    argv: [, , port = PORT || 8080]
+} = process
+;(async () => {
+    await connect(url, { useNewUrlParser: true })
+    app.listen(port, () => {
+        console.log(`PI-1 app listening on port ${port}`)
+    })
+})()

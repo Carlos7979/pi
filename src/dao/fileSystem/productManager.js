@@ -1,9 +1,8 @@
 const fs = require('fs')
 
-class Product {
+class Products {
     constructor(path) {
         this.path = path
-        this.products = []
     }
     async addProduct(title, description, code, price, status, stock, category, thumbnails) {
         try {
@@ -81,13 +80,7 @@ class Product {
             await fs.promises.writeFile(this.path, productsJSON, { encoding: 'utf8' })
             return product
         } catch (error) {
-            if (error.message.includes('no such file or directory')) {
-                const productsJSON = JSON.stringify(this.products, null, 2)
-                await fs.promises.writeFile(this.path, productsJSON, { encoding: 'utf8' })
-                return product
-            } else {
-                console.log(error)
-            }
+            console.log(error)
         }
     }
     async deleteProduct(id) {
@@ -112,5 +105,5 @@ class Product {
     }
 }
 
-const product = new Product('db/products.json')
-module.exports = product
+const products = new Products('db/products.json')
+module.exports = products
