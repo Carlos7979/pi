@@ -1,8 +1,9 @@
 const { Router } = require('express')
 const router = Router()
 const { Products } = require('../../dao/MongoDB')
+const uploader = require('../../utils/middleware/multer')
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body
     if (!title || !description || !code || !price || !status || !stock || !category)
         return res.status(400).send({ status: 'error', error: 'Todos los campos son obligatorios' })
@@ -24,11 +25,15 @@ router.post('/', async (req, res) => {
                 .send({ status: 'error', error: 'El valor de code debe ser único' })
         res.send({ status: 'success', payload: product })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 
-router.get('/', async (req, res) => {
+router.post('/upload', uploader.single('myFile'), (req, res, next) => {
+	res.send({ status: 'success', message: 'Archivo subido con éxito' })
+})
+
+router.get('/', async (req, res, next) => {
     let { limit } = req.query
     limit = Number(limit)
     try {
@@ -38,11 +43,11 @@ router.get('/', async (req, res) => {
         }
         return res.send({ status: 'success', payload: products })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 
-router.get('/:pid', async (req, res) => {
+router.get('/:pid', async (req, res, next) => {
     try {
         let { pid } = req.params
         const product = await Products.getProductById(pid)
@@ -53,11 +58,11 @@ router.get('/:pid', async (req, res) => {
         }
         return res.send({ status: 'success', payload: product })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 
-router.put('/:pid', async (req, res) => {
+router.put('/:pid', async (req, res, next) => {
     try {
         let { pid } = req.params
         const product = await Products.updateProduct(pid, req.body)
@@ -73,11 +78,11 @@ router.put('/:pid', async (req, res) => {
         }
         return res.send({ status: 'success', payload: product })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 
-router.delete('/:pid', async (req, res) => {
+router.delete('/:pid', async (req, res, next) => {
     try {
         let { pid } = req.params
         const product = await Products.deleteProduct(pid)
@@ -88,7 +93,7 @@ router.delete('/:pid', async (req, res) => {
         }
         return res.send({ status: 'success', payload: product })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 

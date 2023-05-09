@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { Product } = require('../../dao/fileSystem')
+const { Products } = require('../../dao/MongoDB')
 const router = Router()
 
 // router.get('/home', async (req, res) => {
@@ -12,14 +12,12 @@ const router = Router()
 // 	}
 // })
 
-router.get('/', (req, res) => {
-    console.log('here')
-    // const products = await Product.getProducts()
+router.get('/', async (req, res, next) => {
+    const products = await Products.getProducts()
     try {
-        // res.render('realTimeProducts', { products })
-        res.render('products')
+        res.render('products', { products })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
 
