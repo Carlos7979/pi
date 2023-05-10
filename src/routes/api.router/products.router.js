@@ -1,7 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 const { Products } = require('../../dao/MongoDB')
-const uploader = require('../../utils/middleware/multer')
+// const uploader = require('../../utils/middleware/multer')
+const { uploader } = require('../../utils/middleware')
 
 router.post('/', async (req, res, next) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body

@@ -3,9 +3,7 @@ const { Carts } = require('./models')
 class CartManager {
     async addCart() {
         try {
-            console.log('happiness')
             const cart = await Carts.create({})
-            console.log(cart)
             return cart
         } catch (error) {
             console.log(error)
@@ -16,7 +14,6 @@ class CartManager {
             const cart = await Carts.findById(cid).select('-__v').lean()
             if (!cart) return 'Cart not found'
             let productIndex
-			console.log(cart.products)
             const cartProduct = cart.products.find((e, i) => {
                 if (e.product.toString() === pid) {
                     productIndex = i

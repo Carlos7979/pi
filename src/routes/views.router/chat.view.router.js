@@ -1,11 +1,11 @@
 const { Router } = require('express')
-const { Products } = require('../../dao/MongoDB')
+// const { Messages } = require('../../dao/MongoDB')
 const router = Router()
 
 router.get('/', async (req, res, next) => {
-    const products = await Products.getProducts()
+    // const messages = await Messages.getMessages()
     try {
-        res.render('products', { products })
+        res.render('chat', {})
     } catch (error) {
         next(error)
     }
