@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router()
 const { Products } = require('../../dao/MongoDB')
-// const uploader = require('../../utils/middleware/multer')
 const { uploader } = require('../../utils/middleware')
 
 router.post('/', async (req, res, next) => {
@@ -19,7 +18,6 @@ router.post('/', async (req, res, next) => {
             category,
             thumbnails
         )
-        console.log(product)
         if (product === 'El valor de code debe ser único')
             return res
                 .status(400)
@@ -31,7 +29,7 @@ router.post('/', async (req, res, next) => {
 })
 
 router.post('/upload', uploader.single('myFile'), (req, res, next) => {
-	res.send({ status: 'success', message: 'Archivo subido con éxito' })
+    res.send({ status: 'success', message: 'Archivo subido con éxito' })
 })
 
 router.get('/', async (req, res, next) => {
