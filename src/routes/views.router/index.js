@@ -8,5 +8,8 @@ const chat = require('./chat.view.router')
 // Configurar los routers
 router.use('/products', products)
 router.use('/chat', chat)
+router.use('/', (req, res, next) => {
+    res.render('home', {})
+})
 
 module.exports = router
