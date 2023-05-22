@@ -1,0 +1,32 @@
+<div>
+	<h1>Usuarios</h1>
+	<a href="/">Volver a home</a>
+	{{!-- <form id="add-product" action="/products" method="POST">
+		<input type="text" name="title" placeholder="Ingresa un título">
+		<input type="text" name="description" placeholder="Ingresa una descripción">
+		<input type="number" name="price" placeholder="Ingresa un precio">
+		<input type="text" name="thumbnail" placeholder="Ingresa la url de una imagen">
+		<input type="text" name="code" placeholder="Ingresa un código">
+		<input type="number" name="stock" placeholder="Ingresa un número de stock">
+		<button>Enviar</button>
+	</form>
+	<div>
+		<button id="button-emit-for-all" onclick="emitForAll()">Mensaje para todos (incluyéndome)</button>
+		<button id="button-emit-for-all" onclick="emitForAllExceptMe()">Mensaje para los demás</button>
+	</div> --}}
+	<div class="user-container">
+		{{#if hasPrevPage}}
+			<a href="/users?limit=50&page={{prevPage}}"><button>Anterior</button></a>
+		{{/if}}
+		{{#if hasNextPage}}
+			<a href="/users?limit=50&page={{nextPage}}"><button>Siguiente</button></a>
+		{{/if}}
+		{{#each users}}
+		<div class="user">
+			<ul>
+				<li>Nombre: {{this.first_name}}</li>
+			</ul>
+		</div>
+		{{/each}}
+	</div>
+</div>

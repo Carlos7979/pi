@@ -25,11 +25,25 @@ class UserManager {
     // }
     async getUsers() {
         try {
-            let users = await Users.find().select('-__v').lean()
-			// let users = await Users.find({first_name: 'Vlad'}).explain('executionStats').select('-__v').lean()
-			// let users = await Users.find().select('-__v').lean().explain('executionStats')
-			// let users = await Users.find().explain('executionStats')
+            const users = await Users.find().select('-__v').lean()
+            // const users = await Users.find({first_name: 'Vlad'}).explain('executionStats').select('-__v').lean()
+            // const users = await Users.find().select('-__v').lean().explain('executionStats')
+            // const users = await Users.find().explain('executionStats')
             return users
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async getPaginatedUsers(limit, page) {
+        try {
+            const {
+                docs: users,
+                hasPrevPage,
+                hasNextPage,
+                prevPage,
+                nextPage
+            } = await Users.paginate({}, { limit, page, lean: true })
+            return { users, hasPrevPage, hasNextPage, prevPage, nextPage }
         } catch (error) {
             console.log(error)
         }
