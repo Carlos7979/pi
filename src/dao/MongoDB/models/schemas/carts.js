@@ -10,4 +10,8 @@ const carts = new Schema({
 	}
 })
 
+// carts.pre('findOne', function() {
+// 	this.populate('products.product')
+// })
+
 module.exports = carts
