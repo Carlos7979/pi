@@ -32,6 +32,16 @@ router.post('/upload', uploader.single('myFile'), (req, res, next) => {
     res.send({ status: 'success', message: 'Archivo subido con éxito' })
 })
 
+router.get('/aggregations/:type', async (req, res, next) => {
+	const { type } = req.params
+	try {
+		const products = await Products.getAggregations( type )
+		return res.send({ status: 'success', payload: products })
+	} catch (error) {
+		next(error)
+	}
+})
+
 router.get('/', async (req, res, next) => {
     let { limit } = req.query
     limit = Number(limit)
