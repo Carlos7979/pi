@@ -32,16 +32,6 @@ router.post('/upload', uploader.single('myFile'), (req, res, next) => {
     res.send({ status: 'success', message: 'Archivo subido con éxito' })
 })
 
-router.get('/aggregations/:type', async (req, res, next) => {
-	const { type } = req.params
-	try {
-		const products = await Products.getAggregations( type )
-		return res.send({ status: 'success', payload: products })
-	} catch (error) {
-		next(error)
-	}
-})
-
 router.get('/', async (req, res, next) => {
     let { limit, page, sort, category, status } = req.query
 	if (limit) limit = Number(limit)
@@ -61,12 +51,16 @@ router.get('/', async (req, res, next) => {
 	if (status) {
 		statusLink += `&status=${status}`
 	}
+	let sortLink = ''
+	if (sort) {
+		sortLink += `&sort=${sort}`
+	}
     try {
         const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
 		const {docs, ...rest} = paginatedProducts
 		const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
-		const prevLink = hasPrevPage ? '/api/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink : null
-		const nextLink = hasNextPage ? '/api/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink : null
+		const prevLink = hasPrevPage ? '/api/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink + sortLink : null
+		const nextLink = hasNextPage ? '/api/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink + sortLink : null
 		return res.send({ status: 'success', payload: docs, ...rest, prevLink, nextLink })
     } catch (error) {
         next(error)
