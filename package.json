@@ -1,5 +1,5 @@
 {
-  "name": "pi-1",
+  "name": "pi",
   "version": "1.0.0",
   "description": "Práctica integradora 1",
   "main": "index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Carlos7979/pi-1"
+    "url": "https://github.com/Carlos7979/pi"
   },
   "author": "Carlos Corredor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Carlos7979/pi-1/issues"
+    "url": "https://github.com/Carlos7979/pi/issues"
   },
-  "homepage": "https://github.com/Carlos7979/pi-1#readme",
+  "homepage": "https://github.com/Carlos7979/pi#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
