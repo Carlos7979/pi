@@ -13,7 +13,7 @@ const {
 ;(async () => {
     await connect(url, { useNewUrlParser: true })
     const httpServer = app.listen(port, () => {
-        console.log(`PI-1 app listening on port ${port}`)
+        console.log(`PI app listening on port ${port}`)
     })
     const io = new Server(httpServer)
     socketServer(io)
