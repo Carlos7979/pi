@@ -22,10 +22,6 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-// router.post('/upload', uploader.single('myFile'), (req, res, next) => {
-//     res.send({ status: 'success', message: 'Archivo subido con éxito' })
-// })
-
 router.get('/', async (req, res, next) => {
     let { limit } = req.query
     limit = Number(limit)
