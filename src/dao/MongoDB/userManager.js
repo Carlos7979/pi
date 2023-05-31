@@ -1,56 +1,42 @@
-const { Users } = require('./models')
+const { emailValidate, idMongodb } = require('../../utils/controller/validate')
+const { Users, Carts } = require('./models')
 
 class UserManager {
-    // async addProduct(title, description, code, price, status, stock, category, thumbnails) {
-    //     try {
-    //         if (!title || !description || !code || !price || !status || !stock || !category)
-    //             return 'Todos los campos son obligatorios'
-    //         const productByCode = await Products.find({ code }).select('-__v').lean()
-    //         if (productByCode.length > 0) return 'El valor de code debe ser único'
-    //         if (!thumbnails) thumbnails = []
-    //         const product = {
-    //             title,
-    //             description,
-    //             code,
-    //             price,
-    //             status,
-    //             stock,
-    //             category,
-    //             thumbnails
-    //         }
-    //         return await Products.create(product)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-    async getUsers() {
+    async addUser({ first_name, last_name, email, password, date_of_birth }) {
         try {
-            const users = await Users.find().select('-__v').lean()
-            // const users = await Users.find({first_name: 'Vlad'}).explain('executionStats').select('-__v').lean()
-            // const users = await Users.find().select('-__v').lean().explain('executionStats')
-            // const users = await Users.find().explain('executionStats')
-            return users
+            if (!first_name || !last_name || !email || !password || !date_of_birth)
+                return 'Todos los campos son obligatorios'
+            emailValidate(email)
+            const user = await Users.find({ email })
+			if (user.length > 0) return 'Correo ya registrado'
+            const cart = await Carts.create({})
+            if (!cart) return 'Error al crear carrito de compras'
+            let newUser = await Users.create({
+                first_name,
+                last_name,
+                email,
+                password,
+                date_of_birth,
+                cart: cart._id
+            })
+			newUser = await Carts.populate(newUser, { path: 'cart' })
+			const { __v, password: passwordNewUser, role, ...response } = newUser._doc
+			return response
         } catch (error) {
             console.log(error)
         }
     }
-    async getPaginatedUsers(limit, page) {
+    async getUsers() {
         try {
-            const {
-                docs: users,
-                hasPrevPage,
-                hasNextPage,
-                prevPage,
-                nextPage
-            } = await Users.paginate({}, { limit, page, lean: true })
-            return { users, hasPrevPage, hasNextPage, prevPage, nextPage }
+            const users = await Users.find().select('-__v -password').lean()
+            return users
         } catch (error) {
             console.log(error)
         }
     }
     async getUserById(id) {
         try {
-            const user = await Users.findById(id).select('-__v').lean()
+            const user = await Users.findById(id).select('-__v -password -role').lean()
             if (user) return user
             return 'Not found'
         } catch (error) {

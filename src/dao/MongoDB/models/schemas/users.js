@@ -1,20 +1,18 @@
 const { Schema } = require('mongoose')
-const mongoosePaginate = require('mongoose-aggregate-paginate-v2')
 
 const users = new Schema({
 	first_name: {
 		type: String,
-		required: true,
-		index: true
+        required: true
 	},
 	last_name: {
 		type: String,
-		required: true
+        required: true
 	},
-	email: {
+    email: {
         type: String,
         required: true,
-		unique: true,
+        unique: true,
         validate: {
             validator: function (value) {
                 const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -25,9 +23,22 @@ const users = new Schema({
             }
         }
     },
-	gender: String
+	date_of_birth: {
+		type: Date,
+        required: true
+	},
+	password: {
+		type: String,
+		required: true
+	},
+	cart: {
+		type: Schema.Types.ObjectId, ref: 'Carts'
+	},
+	role: {
+		type: String,
+		default: 'user',
+		enum: ["admin", "user"]
+	}
 })
-
-users.plugin(mongoosePaginate)
 
 module.exports = users

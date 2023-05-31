@@ -1,31 +1,26 @@
 const { Router } = require('express')
 const router = Router()
 const { Users } = require('../../dao/MongoDB')
+const { emailValidate } = require('../../utils/controller/validate')
 
-// router.post('/', async (req, res, next) => {
-//     const { title, description, code, price, status, stock, category, thumbnails } = req.body
-//     if (!title || !description || !code || !price || !status || !stock || !category)
-//         return res.status(400).send({ status: 'error', error: 'Todos los campos son obligatorios' })
-//     try {
-//         const product = await Products.addProduct(
-//             title,
-//             description,
-//             code,
-//             price,
-//             status,
-//             stock,
-//             category,
-//             thumbnails
-//         )
-//         if (product === 'El valor de code debe ser único')
-//             return res
-//                 .status(400)
-//                 .send({ status: 'error', error: 'El valor de code debe ser único' })
-//         res.send({ status: 'success', payload: product })
-//     } catch (error) {
-//         next(error)
-//     }
-// })
+router.post('/', async (req, res, next) => {
+    const { first_name, last_name, email, password, date_of_birth } = req.body
+    try {
+        if (!first_name || !last_name || !email || !password || !date_of_birth) {
+            throw new Error('Todos los campos son obligatorios')
+        }
+        emailValidate(email)
+        const user = await Users.addUser({ first_name, last_name, email, password, date_of_birth })
+        if (user === 'Todos los campos son obligatorios')
+            throw new Error('Todos los campos son obligatorios')
+        if (user === 'Error al crear carrito de compras')
+            throw new Error('Error al crear carrito de compras')
+        if (user === 'Correo ya registrado') throw new Error('Correo ya registrado')
+        res.send({ status: 'success', payload: user })
+    } catch (error) {
+        next(error)
+    }
+})
 
 // router.post('/upload', uploader.single('myFile'), (req, res, next) => {
 //     res.send({ status: 'success', message: 'Archivo subido con éxito' })
@@ -59,40 +54,5 @@ router.get('/:uid', async (req, res, next) => {
         next(error)
     }
 })
-
-// router.put('/:pid', async (req, res, next) => {
-//     try {
-//         let { pid } = req.params
-//         const product = await Products.updateProduct(pid, req.body)
-//         if (product === 'Not found') {
-//             return res
-//                 .status(400)
-//                 .send({ status: 'error', error: `El producto con el id ${pid} no existe` })
-//         }
-//         if (product === 'El valor de code debe ser único') {
-//             return res
-//                 .status(400)
-//                 .send({ status: 'error', error: `El valor de code ya existe para otro producto` })
-//         }
-//         return res.send({ status: 'success', payload: product })
-//     } catch (error) {
-//         next(error)
-//     }
-// })
-
-// router.delete('/:pid', async (req, res, next) => {
-//     try {
-//         let { pid } = req.params
-//         const product = await Products.deleteProduct(pid)
-//         if (product === 'Not found') {
-//             return res
-//                 .status(400)
-//                 .send({ status: 'error', error: `El producto con el id ${pid} no existe` })
-//         }
-//         return res.send({ status: 'success', payload: product })
-//     } catch (error) {
-//         next(error)
-//     }
-// })
 
 module.exports = router
