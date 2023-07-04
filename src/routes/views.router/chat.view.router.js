@@ -1,11 +1,11 @@
 const { Router } = require('express')
-// const { Messages } = require('../../dao/MongoDB')
+const { messageManager } = require('../../dao/MongoDB')
 const router = Router()
 
 router.get('/', async (req, res, next) => {
-    // const messages = await Messages.getMessages()
+    const messages = await messageManager.getMessages()
     try {
-        res.render('chat', {})
+        res.render('chat', { messages })
     } catch (error) {
         next(error)
     }
